@@ -8,6 +8,7 @@ const storage = new CloudinaryStorage({
     folder: 'social-app',
     allowedFormats: ['jpg', 'png', 'jpeg'],
   }
+  
 });
 
 const upload = multer({ 
@@ -15,13 +16,6 @@ const upload = multer({
   limits: {
     fileSize: 7 * 1024 * 1024 
   },
-  fileFilter: (req, file, cb) => {
-    if (file.mimetype.startsWith('image/')) {
-      cb(null, true);
-    } else {
-      cb(new Error('Only image files allowed'), false);
-    }
-  }
 });
 
 module.exports = {

@@ -5,12 +5,12 @@ const { createSecretToken } = require("../utils/secret.Tokens");
 
 module.exports.register = async (req, res) => {
   try {
-    const { name, username, password, email } = req.body;
-    if (!name || !username || !password || !email) {
-      return res.status(400).json({
-        message: "All Fields are Required !",
-        success: false,
-      });
+     const { name, username, password, email } = req.body;
+     if (!name || !username || !password || !email) {
+       return res.status(400).json({
+          message: "All Fields are Required !",
+          success: false,
+      } );
     }
     const user = await userModel.findOne({ email });
     if (user) {
@@ -35,14 +35,16 @@ module.exports.register = async (req, res) => {
       sameSite: "none",
       maxAge: 3 * 24 * 60 * 60 * 1000, // 3 days
     });
-
+    console.log("New user created:", newUser);
+    
     const profile = new profileModel({
       userId: newUser._id,
     });
-
+     await profile.save();
+     console.log("Profile created for user:", profile);
     res
       .status(200)
-      .json({ message: "User Created Successfully", success: true });
+      .json({ message: "User Created Successfully", success: true ,user:newUser, profile:profile});
   } catch (err) {
     return res.status(400).json({
       message: "Failed to Create User",

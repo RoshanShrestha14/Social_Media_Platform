@@ -28,11 +28,8 @@ const userSchema = new Schema({
         type:String,
         default:"defaultProfile.png",
     },
-    createdAt:{
-        type:Date,
-        default:Date.now,
-    }, 
-});
+
+}, { timestamps: true });
 
 const userModel=model("User",userSchema);
 
