@@ -7,6 +7,8 @@ const {
   acceptConnection,
   rejectConnection,
   cancelConnection,
+  updateProfile,
+  allConnections
 } = require("../controllers/user.Controllers");
 const { userVerification } = require("../middlewares/Auth.Middleware");
 
@@ -16,9 +18,12 @@ router.post(
   singleUpload,
   updateProfilePicture
 );
+router.put("/editProfile",userVerification,updateProfile)
 router.post("/sendConnectionRequest", userVerification, sendConnection);
 router.put("/acceptConnectionRequest", userVerification, acceptConnection);
 router.put("/rejectConnectionRequest", userVerification, rejectConnection);
-router.put("cancelConnectionRequest", userVerification, cancelConnection);
+router.put("/cancelConnectionRequest", userVerification, cancelConnection);
+router.get("/getAllConnections",userVerification,allConnections);
+
 
 module.exports = router;

@@ -1,5 +1,6 @@
 const userModel = require("../models/userModels");
 const connectionModel = require("../models/connectionModels");
+const profileModel = require("../models/profile.Models");
 // updating profile pic
 module.exports.updateProfilePicture = async (req, res) => {
   try {
@@ -45,6 +46,11 @@ module.exports.updateProfile = async (req, res) => {
         success: false,
       });
     }
+    return res.status(200).json({
+      message: "Profile updated successfully",
+      success: true,
+      data: profile,
+    });
   } catch (err) {
     console.log("errro is ", err);
 
@@ -222,5 +228,43 @@ module.exports.cancelConnection = async (req, res) => {
     });
   } catch (err) {
     console.log("errro is ", err);
+  }
+};
+
+module.exports.allConnections = async (req, res) => {
+  try {
+    const userId = req.userId;
+
+    const connections = await connectionModel
+      .find({
+        status: "accepted",
+        $or: [{ requesterId: userId }, { recipientId: userId }],
+      })
+      .populate("requesterId", "name username profilePicture")
+      .populate("recipientId", "name username profilePicture");
+
+
+      
+    const formattedConnections = connections.map((conn) => {
+      const isRequester = conn.requesterId._id.toString() === userId;
+
+      return {
+        connectionId: conn._id,
+        connectedUser: isRequester ? conn.recipientId : conn.requesterId,
+      };
+    });
+
+    res.status(200).json({
+      success: true,
+      count: formattedConnections.length,
+      formattedConnections,
+    });
+    
+  } catch (err) {
+    console.log("error is ", err);
+    res.status(400).json({
+      success: false,
+      message: "failed to fetch the connection list ",
+    });
   }
 };
