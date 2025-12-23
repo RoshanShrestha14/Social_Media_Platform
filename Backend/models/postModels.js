@@ -1,20 +1,36 @@
 const { mongoose } = require("mongoose");
-const { post } = require("../routes/postsRoutes");
 const { Schema, model } = mongoose;
 
-const postSchema = new Schema({
-  userId: { type: mongoose.Schema.Types.ObjectId, ref: "User", required: true },
-  body: {
-    type: String,
-    required: true,
+const postSchema = new Schema(
+  {
+    userId: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User",
+      required: true,
+    },
+
+    body: {
+      type: String,
+      default:""
+    },
+
+    image: {
+      type: String,
+      default:""
+    },
+
+    likesCount: {
+      type: Number,
+      default: 0,
+    },
+
+    isActive: {
+      type: Boolean,
+      default: true,
+    },
   },
-  likes: { type: Number, default: 0 },
-  createdAt: { type: Date, default: Date.now },
-  updateAt: { type: Date, default: Date.now },
-  media: { type: String, default: "" },
-  fileType: { type: String, default: "" },
-  isActive: { type: Boolean, default: true },
-});
+  { timestamps: true }
+);
 
 const postModel = model("Post", postSchema);
 

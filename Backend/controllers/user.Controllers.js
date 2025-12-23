@@ -228,6 +228,10 @@ module.exports.cancelConnection = async (req, res) => {
     });
   } catch (err) {
     console.log("errro is ", err);
+    return res.status(400).json({
+      message: "failed to cancel connnection",
+      success: false,
+    });
   }
 };
 
@@ -243,8 +247,6 @@ module.exports.allConnections = async (req, res) => {
       .populate("requesterId", "name username profilePicture")
       .populate("recipientId", "name username profilePicture");
 
-
-      
     const formattedConnections = connections.map((conn) => {
       const isRequester = conn.requesterId._id.toString() === userId;
 
@@ -259,7 +261,6 @@ module.exports.allConnections = async (req, res) => {
       count: formattedConnections.length,
       formattedConnections,
     });
-    
   } catch (err) {
     console.log("error is ", err);
     res.status(400).json({
