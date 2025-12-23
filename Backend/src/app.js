@@ -12,6 +12,7 @@ const userModel = require("../models/userModels");
 const userRoutes = require("../routes/user.Routes");
 const cookieParser = require("cookie-parser");
 const postRoutes = require("../routes/postsRoutes")
+const commentRoutes = require("../routes/comment.Routes")
 
 async function connectDB() {
   try {
@@ -38,7 +39,8 @@ app.use(
 //routes
 app.use("/auth", authRoutes);
 app.use("/users", userRoutes);
-app.use("/posts",postRoutes)
+app.use("/posts",postRoutes);
+app.use("/comments",commentRoutes)
 
 app.get("/destroy", async (req, res) => {
   try {

@@ -7,9 +7,9 @@ const router = express.Router();
 
 router.get("/active",activeCheck);
 router.post("/uploadPost",userVerification,singleUpload,createPost);
-router.post("/getUserPosts",userVerification,getUserPosts);
+router.get("/getUserPosts",userVerification,getUserPosts);
 router.post("/getAllPosts",userVerification,getAllUsersPost);
-router.post("/destroyPost",userVerification,deletePost)
+router.delete("/destroyPost",userVerification,deletePost)
 
 
 module.exports = router; 
