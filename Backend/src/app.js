@@ -42,7 +42,7 @@ app.use("/users", userRoutes);
 app.use("/posts",postRoutes);
 app.use("/comments",commentRoutes)
 
-app.get("/destroy", async (req, res) => {
+app.get("/destrooy", async (req, res) => {
   try {
     await userModel.deleteMany({});
     res.status(200).json({

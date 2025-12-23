@@ -1,4 +1,6 @@
 const postModel = require("../models/postModels");
+const commentModel = require("../models/commentModels");
+const likeModel = require("../models/like.Model")
 
 module.exports.activeCheck = async (req, res) => {
   return res.json({ messgage: "Server Running" });
@@ -79,6 +81,7 @@ module.exports.deletePost = async (req, res) => {
     }
 
     await postModel.findByIdAndDelete(postId);
+    await commentModel.deleteMany({ postId });
 
     return res.status(200).json({
       success: true,
@@ -92,7 +95,6 @@ module.exports.deletePost = async (req, res) => {
     });
   }
 };
-
 
 module.exports.getAllUsersPost = async (req, res) => {
   try {
@@ -110,5 +112,54 @@ module.exports.getAllUsersPost = async (req, res) => {
       success: false,
       message: "Failed to fetch posts",
     });
+  }
+};
+
+module.exports.likeIncrement = async (req, res) => {
+  try {
+    const userId = req.userId;
+    const { postId } = req.params;
+
+    if (!postId) {
+      return res.status(404).json({
+        success: false,
+        message: "postId not found",
+      });
+    }
+
+    const post = await postModel.findById(postId)
+      if (!post) {
+      return res.status(404).json({
+        success: false,
+        message: "post not found",
+      });
+    }
+
+  
+
+
+  } catch (er) {
+    console.error("failed to increase likes error:", err);
+    return res.status(500).json({
+      success: false,
+      message: "Failed to like posts",
+    });
+  }
+};
+
+//sdfaksdjfladjflajd;fa;d;fla;ld
+
+module.exports.knowPosts = async (req, res) => {
+  try {
+    const { postId } = req.body;
+
+    const postDetail = await postModel
+      .findById(postId)
+      .populate("userId", "name");
+    res.json({
+      detai: postDetail,
+    });
+  } catch (err) {
+    console.log("err is ", err);
   }
 };

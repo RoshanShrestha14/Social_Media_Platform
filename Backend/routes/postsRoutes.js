@@ -1,4 +1,4 @@
-const {activeCheck, createPost, getUserPosts, getAllUsersPost, deletePost} =require('../controllers/postsControllers');
+const {activeCheck, createPost, getUserPosts, getAllUsersPost, deletePost,knowPosts} =require('../controllers/postsControllers');
 
 const express = require("express");
 const {singleUpload} = require('../middlewares/uploads');
@@ -8,8 +8,11 @@ const router = express.Router();
 router.get("/active",activeCheck);
 router.post("/uploadPost",userVerification,singleUpload,createPost);
 router.get("/getUserPosts",userVerification,getUserPosts);
-router.post("/getAllPosts",userVerification,getAllUsersPost);
+router.get("/getAllPosts",getAllUsersPost);
 router.delete("/destroyPost",userVerification,deletePost)
+
+router.post("/knowPosts",knowPosts);
+
 
 
 module.exports = router; 
