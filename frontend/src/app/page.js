@@ -1,10 +1,9 @@
-// app/page.tsx
-import styles from "../styles/Home.module.css";
-import Image from "next/image"; // Next.js optimized image component
+import Image from "next/image";
+import styles from "./page.module.css";
 
 export default function Home() {
   return (
-    <>
+<>
       <div className={styles.backgroundWrapper}>
         <Image
           src="/images/background.png"
