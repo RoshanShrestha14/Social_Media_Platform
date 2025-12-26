@@ -1,6 +1,6 @@
 const postModel = require("../models/postModels");
 const commentModel = require("../models/commentModels");
-const likeModel = require("../models/like.Model")
+const likeModel = require("../models/like.Model");
 
 module.exports.activeCheck = async (req, res) => {
   return res.json({ messgage: "Server Running" });
@@ -115,34 +115,72 @@ module.exports.getAllUsersPost = async (req, res) => {
   }
 };
 
-module.exports.likeIncrement = async (req, res) => {
+module.exports.toggleLike = async (req, res) => {
   try {
     const userId = req.userId;
-    const { postId } = req.params;
+    const { postId } = req.body;
 
     if (!postId) {
-      return res.status(404).json({
+      return res.status(400).json({
         success: false,
-        message: "postId not found",
+        message: "postId is required",
       });
     }
 
-    const post = await postModel.findById(postId)
-      if (!post) {
+    const post = await postModel.findById(postId);
+    if (!post) {
       return res.status(404).json({
         success: false,
-        message: "post not found",
+        message: "Post not found",
       });
     }
 
-  
+    const existingLike = await likeModel.findOne({ userId, postId });
 
+    if (!existingLike) {
+      try {
+        await likeModel.create({ userId, postId });
 
-  } catch (er) {
-    console.error("failed to increase likes error:", err);
+        await postModel.findByIdAndUpdate(
+          postId,
+          { $inc: { likesCount: 1 } },
+          { new: true }
+        );
+
+        return res.status(200).json({
+          success: true,
+          liked: true,
+          message: "Post liked",
+        });
+      } catch (error) {
+        if (error.code === 11000) {
+          return res.status(409).json({
+            success: false,
+            message: "Already liked",
+          });
+        }
+        throw error;
+      }
+    }
+
+    await likeModel.findByIdAndDelete(existingLike._id);
+
+    await postModel.findByIdAndUpdate(
+      postId,
+      { $inc: { likesCount: -1 } },
+      { new: true }
+    );
+
+    return res.status(200).json({
+      success: true,
+      liked: false,
+      message: "Post unliked",
+    });
+  } catch (err) {
+    console.error("toggle like error:", err);
     return res.status(500).json({
       success: false,
-      message: "Failed to like posts",
+      message: "Something went wrong",
     });
   }
 };
