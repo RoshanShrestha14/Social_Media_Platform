@@ -24,12 +24,11 @@ export default function Home() {
 
           <h1 className={styles.title}>Connect. Share. Belong.</h1>
           <p className={styles.subtitle}>
-            A modern social platform built for real connections. Join thousands
-            who are already sharing their stories.
+          Connect through conversations, bond through stories
           </p>
 
           <div className={styles.actions}>
-            <a href="/register" className={styles.primaryBtn}>
+            <a href="/signup" className={styles.primaryBtn}>
               Get Started Free
             </a>
             <a href="/login" className={styles.secondaryBtn}>
